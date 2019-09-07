@@ -5,14 +5,16 @@
  */
 package com.udec.Clases;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author JuanPC
  */
-public class Antecedentes {
+public class Antecedentes implements Serializable{
     
+    private static final long serialVersionUID = -2873344211410398459L;
     private Date fechaAntecedente;
     private String descripcion;
     private TipoAntecedente tipo;

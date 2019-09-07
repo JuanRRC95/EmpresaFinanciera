@@ -5,28 +5,30 @@
  */
 package com.udec.Clases;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  *
  * @author JuanPC
  */
-public class Persona {
+public class Persona implements Serializable {
     
+    private static final long serialVersionUID = -2873344211410398459L;
     private String nombre;
     private byte edad;
     private String cedula;
     private Genero genero;
-    private List<Antecedentes> lista = new ArrayList<>();
+    private List<Antecedentes> lista;
 
-    public Persona(String nombre, byte edad, String cedula, Genero genero) {
+    public Persona(String nombre, byte edad, String cedula, Genero genero, List<Antecedentes> lista) {
         this.nombre = nombre;
         this.edad = edad;
         this.cedula = cedula;
         this.genero = genero;
+        this.lista = lista;
     }
-
+    
     public List<Antecedentes> getLista() {
         return lista;
     }
@@ -74,5 +76,12 @@ public class Persona {
     public List<Antecedentes> traerAntecedentes(){
         return getLista();
     }
+
+    @Override
+    public String toString() {
+        return "Persona{" + "nombre=" + nombre + ", edad=" + edad + ", cedula=" + cedula + ", genero=" + genero + ", lista=" + lista + '}';
+    }
+    
+    
     
 }

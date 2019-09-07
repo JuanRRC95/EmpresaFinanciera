@@ -5,6 +5,7 @@
  */
 package com.udec.Clases;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,8 +13,9 @@ import java.util.List;
  *
  * @author JuanPC
  */
-public class TipoAntecedente {
+public class TipoAntecedente implements Serializable{
     
+    private static final long serialVersionUID = -2873344211410398459L;
     private String nombreCaracteristico;
     private String descripcion;
     
@@ -42,9 +44,9 @@ public class TipoAntecedente {
     public void listaTiposAntecedentesPositivos(){
         List<TipoAntecedente>lista = new ArrayList<>();
         lista = new ArrayList<>();
-        TipoAntecedente tipo1 = new TipoAntecedente("Pago oportuno","El usuario tiene un excelente historial de pago");
-        TipoAntecedente tipo2 = new TipoAntecedente("Ingreso seguro","El usuario tiene ingresos fijos");
-        TipoAntecedente tipo3 = new TipoAntecedente("Buenas Referencias","Tiene buenas refrencias de otras entidades");
+        TipoAntecedente tipo1 = new TipoAntecedente("A1","El usuario tiene un excelente historial de pago");
+        TipoAntecedente tipo2 = new TipoAntecedente("A2","El usuario tiene ingresos fijos");
+        TipoAntecedente tipo3 = new TipoAntecedente("A3","Tiene buenas refrencias de otras entidades");
         lista.add(tipo1);
         lista.add(tipo2);
         lista.add(tipo3);
@@ -53,9 +55,9 @@ public class TipoAntecedente {
     public void listaTiposAntecedentesNegativos(){
         List<TipoAntecedente>lista = new ArrayList<>();
         lista = new ArrayList<>();
-        TipoAntecedente tipo1 = new TipoAntecedente("Pago retrasado","El usuario tiene un historial de retardos en los pagos");
-        TipoAntecedente tipo2 = new TipoAntecedente("Sin ingresos fijos","El usuario no tiene ingresos estables");
-        TipoAntecedente tipo3 = new TipoAntecedente("Referencias malas o nulas","El usuario tiene malas referencias de otras entidades o simplemente no las tiene");
+        TipoAntecedente tipo1 = new TipoAntecedente("N1","El usuario tiene un historial de retardos en los pagos");
+        TipoAntecedente tipo2 = new TipoAntecedente("N2","El usuario no tiene ingresos estables");
+        TipoAntecedente tipo3 = new TipoAntecedente("N3","El usuario tiene malas referencias de otras entidades o simplemente no las tiene");
         lista.add(tipo1);
         lista.add(tipo2);
         lista.add(tipo3);

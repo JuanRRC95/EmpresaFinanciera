@@ -71,6 +71,8 @@ public class Persona {
         lista.add(antecedente);       
     }
     
-    
+    public List<Antecedentes> traerAntecedentes(){
+        return getLista();
+    }
     
 }

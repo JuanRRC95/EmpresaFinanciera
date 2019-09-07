@@ -5,9 +5,13 @@
  */
 package com.udec.Logica;
 
+import com.udec.Clases.Antecedentes;
 import com.udec.Clases.Genero;
 import com.udec.Clases.Persona;
+import com.udec.Clases.TipoAntecedente;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -22,11 +26,16 @@ public class Logica {
     
     public Logica(){
         crearUsuario();
+        añadirantecedente();
         for (Persona p : lista) {
             System.out.println("Nombre :"+p.getNombre());
             System.out.println("Edad :"+p.getEdad());
             System.out.println("Cedula :"+p.getCedula());
             System.out.println("Genero :"+p.getGenero());
+            for (Antecedentes lista1 : p.getLista()) {
+                System.out.println("Antecedente : "+lista1.getDescripcion());
+                System.out.println("Antecedente : "+lista1.getFechaAntecedente());
+            }
         }
     }
     
@@ -53,7 +62,14 @@ public class Logica {
     }
     
     public void añadirantecedente(){
-        
+        for (Persona lista1 : lista) {
+            if(lista1.getCedula().equals("1074188634")){
+               Date fecha = new Date();
+               TipoAntecedente t = new TipoAntecedente("hola","Mundo");
+               Antecedentes an = new Antecedentes(fecha,"jumm",t);
+               lista1.agregarAntecedente(an);
+            }
+        }
     }
     
     

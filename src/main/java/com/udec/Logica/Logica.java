@@ -36,25 +36,8 @@ public class Logica {
     private List<Persona>lista = new ArrayList<>();
     
     public Logica(){
-        System.out.println("ingrese la cedula");
-        String cedula = consola.next();
-        //crearFicheroConDatos(BusquedaEditarUsuario(cedula));
-        //crearUsuario();
-        //añadirantecedente();
-        /*
-        for (Persona p : lista) {
-            System.out.println("Nombre :"+p.getNombre());
-            System.out.println("Edad :"+p.getEdad());
-            System.out.println("Cedula :"+p.getCedula());
-            System.out.println("Genero :"+p.getGenero());
-            for (Antecedentes lista1 : p.getLista()) {
-                System.out.println("Antecedente : "+lista1.getDescripcion());
-                System.out.println("Antecedente : "+lista1.getFechaAntecedente());
-            }
-        }
-                */
-        leerFichero();
-        
+        menuConsola();
+
     }
     
     public void menu(){
@@ -62,23 +45,31 @@ public class Logica {
         System.out.println("1. Registrar Usuario");
         System.out.println("2. Editar Usuario");
         System.out.println("3. Agregar Antecedentes");
-        System.out.println("4. Ver Antecedentes");
+        System.out.println("4. Eliminar Antecedentes");
+        System.out.println("5. Ver Antecedentes");
         System.out.println("0. Finalizar");
         System.out.println("----------------------------");    
     }
     
     public void menuConsola(){
         byte bandera=0;
+        String cedula="";
         while(bandera==0){
+            menu();
             byte opcion=consola.nextByte();
             switch(opcion){
-                case 1: crearUsuario();
+                case 1: crearUsuario();break;
+                case 2:System.out.println("Ingrese la cedula del usuario a editar :");
+                       cedula= consola.next();
+                       crearFicheroConDatos(BusquedaEditarUsuario(cedula));break;
+                case 3:System.out.println(" Ingrese la cedula del usuario : ");
+                       cedula = consola.next();
+                       consolaMenuTipoAntecedentePositivo(cedula);break;
+                case 4:System.out.println("Ingrese la cedula del usuario a editar :");
+                       crearFicheroConDatos(BusquedaAntecedentesUsuario(consola.next()));
                     break;
-                case 2: crearFicheroConDatos(BusquedaEditarUsuario());
-                    break;
-                case 3:
-                    break;
-                case 4:
+                case 5:System.out.println("Ingrese la cedula del usuario a editar :");
+                       visualizarAntecedentes(consola.next());
                     break;
                 case 0: bandera=1;
                     break;
@@ -87,26 +78,118 @@ public class Logica {
     }
     
     public void menuAntecedentes(){
-        System.out.println("-----Tipo de Antecedente-----");
-        System.out.println("1. Positiva ");
-        System.out.println("2. Negativa ");
-        System.out.println("----------------------------");    
-    }
-    
-    public void menuTipoAntecedentePositivos(){
-        System.out.println("-----Categoria de Antecedente-----");
+        System.out.println("-------Tipo de Antecedente--------");
+        System.out.println("-----Categorias de Antecedentes---");
+        System.out.println("----------Positivas---------------");
         System.out.println("1. A1 | PAGOS");
         System.out.println("2. A2 | INGRESOS");
         System.out.println("3. A3 | REFERENCIAS");
-        System.out.println("----------------------------");    
+        System.out.println("----------Negativas---------------");
+        System.out.println("4. N1 | PAGOS");
+        System.out.println("5. N2 | INGRESOS");
+        System.out.println("6. N3 | REFERENCIAS");
+        System.out.println("----------------------------------");    
+        System.out.println("0. Salir ");
+        System.out.println("----------------------------------"); 
+        System.out.println("Ingrese el tipo de antecedente :");
+  
     }
     
-    public void menuTipoAntecedenteNegativos(){
-        System.out.println("-----Categoria de Antecedente-----");
-        System.out.println("1. N1 | PAGOS");
-        System.out.println("2. N2 | INGRESOS");
-        System.out.println("2. N3 | REFERENCIAS");
-        System.out.println("----------------------------");    
+   
+    
+    public void consolaMenuTipoAntecedentePositivo(String cedula){       
+        byte bandera=0;
+        while(bandera==0){
+            menuAntecedentes();
+            byte opcion=consola.nextByte();
+            switch(opcion){
+                case 1: TipoAntecedente antece1 = new TipoAntecedente("A1","PAGOS");
+                        añadirantecedente(antece1, cedula);break;
+                case 2: TipoAntecedente antece2 = new TipoAntecedente("A2","INGRESOS");
+                        añadirantecedente(antece2, cedula);break;
+                case 3: TipoAntecedente antece3 = new TipoAntecedente("A3","REFERENCIAS");
+                        añadirantecedente(antece3, cedula);break;
+                case 4: TipoAntecedente antece4 = new TipoAntecedente("N1","PAGOS");
+                        añadirantecedente(antece4, cedula);break;
+                case 5: TipoAntecedente antece5 = new TipoAntecedente("N2","INGRESOS");
+                        añadirantecedente(antece5, cedula);break;
+                case 6: TipoAntecedente antece6 = new TipoAntecedente("N3","REFERENCIAS");
+                        añadirantecedente(antece6, cedula);break;
+                case 0: bandera=1;break;
+            }
+        }
+    }
+    
+    public void añadirantecedente(TipoAntecedente tipo,String cedula){
+        System.out.println("Ingrese la descripcion del antecedente :");
+        String saltoDeLinea = consola.nextLine();
+        String descripcion = consola.nextLine();
+        crearFicheroConDatos(BusquedaAntecedentesUsuario(tipo,cedula,descripcion));
+        
+    }
+   
+    public List<Persona> BusquedaAntecedentesUsuario(TipoAntecedente tipo,String cedula,String descripcion){
+        List<Persona>lista = new ArrayList<>();
+        Date fecha = new Date();
+        List<Antecedentes> lista2 = new ArrayList<>();
+        lista=leerFichero();
+        for (Persona usuario : lista) {
+            if(usuario.getCedula().equals(cedula)){
+                lista2=usuario.getLista();
+                Antecedentes antecedente = new Antecedentes(fecha, descripcion, tipo);
+                lista2.add(antecedente);
+                usuario.setLista(lista2);
+            }else{
+                System.out.println("EL USUARIO NO EXISTE");
+            }
+        }
+        return lista;
+    }
+  
+    public List<Persona> BusquedaAntecedentesUsuario(String cedula){
+        List<Persona>lista = new ArrayList<>();
+        byte i=1;
+        Date fecha = new Date();
+        List<Antecedentes> lista2 = new ArrayList<>();
+        lista=leerFichero();
+        for (Persona usuario : lista) {
+            if(usuario.getCedula().equals(cedula)){
+                lista2=usuario.getLista();
+                System.out.println("-----Antecedentes Negativos Usuario: "+cedula+"----");
+                visualizarAntecedentesNegativos(cedula, lista2);
+                System.out.println("Digite el indice del antecedente que desea eliminar: ");
+                byte posicion = consola.nextByte();
+                lista2.remove(posicion);
+                usuario.setLista(lista2);
+                
+            }
+        }
+        return lista;
+    }
+    
+    public void visualizarAntecedentes(String cedula){
+        int i=0;
+        List<Antecedentes> lista2 = new ArrayList<>();
+        lista=leerFichero();
+        for (Persona usuario : lista) {
+            if(usuario.getCedula().equals(cedula)){
+                lista2=usuario.getLista();
+                for (Antecedentes elemento : lista2) {
+                    System.out.println((i++)+": "+" | Antecedente :"+elemento.getDescripcion()+
+                       "| Tipo :"+elemento.getTipo().getNombreCaracteristico()+"| FECHA :"+elemento.getFechaAntecedente());
+                }
+            }
+        }
+    }
+    
+    public void visualizarAntecedentesNegativos(String cedula,List<Antecedentes>lista){
+        int i=0;
+        for (Antecedentes elemento : lista) {
+            if(elemento.getTipo().getNombreCaracteristico().equals("N1")||elemento.getTipo().getNombreCaracteristico().equals("N2")||elemento.getTipo().getNombreCaracteristico().equals("N3")){
+                System.out.println(lista.indexOf(elemento)+": "+" | Antecedente :"+elemento.getDescripcion()+
+                   "| Tipo :"+elemento.getTipo().getNombreCaracteristico()+"| FECHA :"+elemento.getFechaAntecedente());
+            }
+        }
     }
     
     public void editarUsuario(Persona usuario){
@@ -207,17 +290,7 @@ public class Logica {
         }
     }
     
-    public void añadirantecedente(){
-        for (Persona lista1 : lista) {
-            if(lista1.getCedula().equals("1074188634")){
-               Date fecha = new Date();
-               TipoAntecedente t = new TipoAntecedente("hola","Mundo");
-               Antecedentes an = new Antecedentes(fecha,"jumm",t);
-               lista1.agregarAntecedente(an);
-            }
-        }
-    }
-       
+        
     public List<Persona> leerFichero(){
         List<Persona> lista = new ArrayList<>();
         try(ObjectInputStream ois=new ObjectInputStream(new FileInputStream("C:\\Users\\JuanPC\\Documents\\NetBeansProjects\\EmpresaFinanciera\\src\\main\\java\\com\\udec\\Ficheros\\usuarios.ddr"))){
@@ -244,20 +317,32 @@ public class Logica {
         return false;
     }
     
-    public List<Persona> BusquedaEditarUsuario(){
-        System.out.println("Ingrese la cedula del usuario a editar :");
-        String cedula = consola.next();
+    public List<Persona> BusquedaEditarUsuario(String cedula){
         List<Persona>lista = new ArrayList<>();
         lista=leerFichero();
         for (Persona usuario : lista) {
             if(usuario.getCedula().equals(cedula)){
                 editarUsuario(usuario);
                 usuario=menuEdicion(usuario);
+            }else{
+                System.out.println("EL USUARIO NO EXISTE");
             }
         }
         return lista;
     }
     
+    public void eliminarAntecedente(String cedula){
+        List<Persona>lista = new ArrayList<>();
+        lista=leerFichero();
+        for (Persona usuario : lista) {
+            if(usuario.getCedula().equals(cedula)){
+                
+                usuario=menuEdicion(usuario);
+            }else{
+                System.out.println("EL USUARIO NO EXISTE");
+            }
+        }
+    }
     
     
     public Persona menuEdicion(Persona usuario){

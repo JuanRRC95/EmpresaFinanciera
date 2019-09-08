@@ -36,7 +36,10 @@ public class Logica {
     private List<Persona>lista = new ArrayList<>();
     
     public Logica(){
-        crearUsuario();
+        System.out.println("ingrese la cedula");
+        String cedula = consola.next();
+        //crearFicheroConDatos(BusquedaEditarUsuario(cedula));
+        //crearUsuario();
         //añadirantecedente();
         /*
         for (Persona p : lista) {
@@ -51,11 +54,77 @@ public class Logica {
         }
                 */
         leerFichero();
+        
     }
     
     public void menu(){
-        
+        System.out.println("-----Empresa Financiera-----");
+        System.out.println("1. Registrar Usuario");
+        System.out.println("2. Editar Usuario");
+        System.out.println("3. Agregar Antecedentes");
+        System.out.println("4. Ver Antecedentes");
+        System.out.println("0. Finalizar");
+        System.out.println("----------------------------");    
     }
+    
+    public void menuConsola(){
+        byte bandera=0;
+        while(bandera==0){
+            byte opcion=consola.nextByte();
+            switch(opcion){
+                case 1: crearUsuario();
+                    break;
+                case 2: crearFicheroConDatos(BusquedaEditarUsuario());
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 0: bandera=1;
+                    break;
+            }
+        }
+    }
+    
+    public void menuAntecedentes(){
+        System.out.println("-----Tipo de Antecedente-----");
+        System.out.println("1. Positiva ");
+        System.out.println("2. Negativa ");
+        System.out.println("----------------------------");    
+    }
+    
+    public void menuTipoAntecedentePositivos(){
+        System.out.println("-----Categoria de Antecedente-----");
+        System.out.println("1. A1 | PAGOS");
+        System.out.println("2. A2 | INGRESOS");
+        System.out.println("3. A3 | REFERENCIAS");
+        System.out.println("----------------------------");    
+    }
+    
+    public void menuTipoAntecedenteNegativos(){
+        System.out.println("-----Categoria de Antecedente-----");
+        System.out.println("1. N1 | PAGOS");
+        System.out.println("2. N2 | INGRESOS");
+        System.out.println("2. N3 | REFERENCIAS");
+        System.out.println("----------------------------");    
+    }
+    
+    public void editarUsuario(Persona usuario){
+        System.out.println("----Datos de Usuario----");
+        System.out.println("Nombre :"+usuario.getNombre());
+        System.out.println("Edad   :"+usuario.getEdad());
+        System.out.println("Genero :"+usuario.getGenero());
+        System.out.println("------------------------");
+    }
+    
+    public void consolaMenuEdicion(){
+        System.out.println("Que dato desea modificar?...");
+        System.out.println("1. Nombre");
+        System.out.println("2. Edad");
+        System.out.println("3. Genero");
+        System.out.println("0. Salir y guardar");
+    }
+    
     
     public void crearUsuario(){
         Persona usuario = null;
@@ -64,21 +133,27 @@ public class Logica {
         String nombre = consola.next();
         System.out.println("Ingrese la cedula del usuario :");
         String cedula = consola.next();
-        System.out.println("Ingrese la edad del usuario :");
-        byte edad = consola.nextByte();
-        System.out.println("Ingrese el genero del usuario(M/F)");
-        String genero = consola.next();
-        if(genero.equals("M")||genero.equals("m")){
-                usuario = new Persona(nombre, edad,cedula, Genero.Masculino,lista2);
-            }else if(genero.equals("F")||genero.equals("f")){           
-                usuario = new Persona(nombre, edad,cedula, Genero.Femenino,lista2);
+        if(!validarUsuario(cedula)){
+            System.out.println("Ingrese la edad del usuario :");
+            byte edad = consola.nextByte();
+            System.out.println("Ingrese el genero del usuario(M/F)");
+            String genero = consola.next();            
+            usuario = new Persona(nombre, edad,cedula,ingreseGenero(genero),lista2);              
+            if(leerFichero().size()<=0){
+                crearFicheroInicial(usuario);
+            }else if(leerFichero().size()>0){
+                crearFicheroConDatos(leerFichero(), usuario);
             }
-        if(leerFichero().size()<=0){
-            crearFicheroInicial(usuario);
-        }else if(leerFichero().size()>0){
-            crearFicheroConDatos(leerFichero(), usuario);
+        }else{
+            System.out.println("Esta cedula ya se encuentra registrada.");
         }
-        
+    }
+    
+    public Genero ingreseGenero(String genero){
+        if(genero.equals("M")||genero.equals("m")){
+                   return Genero.Masculino; 
+        }         
+        return Genero.Femenino;  
     }
     
     public String crearJson(Persona persona){
@@ -117,6 +192,21 @@ public class Logica {
         }
     }
     
+    public void crearFicheroConDatos(List<Persona>lista){               
+        FileOutputStream fos = null;
+        ObjectOutputStream salida = null;
+        try {
+            fos = new FileOutputStream("C:\\Users\\JuanPC\\Documents\\NetBeansProjects\\EmpresaFinanciera\\src\\main\\java\\com\\udec\\Ficheros\\usuarios.ddr");
+            salida = new ObjectOutputStream(fos);
+            for (Persona elemento : lista) {
+                Persona usuario = new Persona(elemento.getNombre(),elemento.getEdad(),elemento.getCedula(),elemento.getGenero(),elemento.getLista());
+                salida.writeObject(crearJson(usuario));
+            }
+        }catch(Exception ex){
+            
+        }
+    }
+    
     public void añadirantecedente(){
         for (Persona lista1 : lista) {
             if(lista1.getCedula().equals("1074188634")){
@@ -133,7 +223,7 @@ public class Logica {
         try(ObjectInputStream ois=new ObjectInputStream(new FileInputStream("C:\\Users\\JuanPC\\Documents\\NetBeansProjects\\EmpresaFinanciera\\src\\main\\java\\com\\udec\\Ficheros\\usuarios.ddr"))){
             while(true){            
                 String aux =(String)ois.readObject();
-                //System.out.println(aux);
+                System.out.println(aux);
                 Gson gson = new Gson();                
                 Persona ejemplo = gson.fromJson(aux, Persona.class);
                 lista.add(ejemplo);
@@ -145,22 +235,55 @@ public class Logica {
         return lista;
     }
     
+    public boolean validarUsuario(String cedula){
+        for (Persona usuario : leerFichero()) {
+            if(usuario.getCedula().equals(cedula)){
+                return true;
+            }
+        }
+        return false;
+    }
     
-    public List<Persona> TraerFichero(){
-        try(ObjectInputStream ois=new ObjectInputStream(new FileInputStream("C:\\Users\\JuanPC\\Documents\\NetBeansProjects\\EmpresaFinanciera\\src\\main\\java\\com\\udec\\Ficheros\\usuarios.ddr"))){
-            //Cuando no haya mas objetos saltara la excepcion EOFException
-            List<Persona> lista = new ArrayList<>();
-            
-                //Fichero aux=(Fichero)ois.readObject();
-                lista=(ArrayList)ois.readObject();
-                
-            
-        }catch(ClassNotFoundException e){
-        }catch(EOFException e){
-        }catch(IOException e){
+    public List<Persona> BusquedaEditarUsuario(){
+        System.out.println("Ingrese la cedula del usuario a editar :");
+        String cedula = consola.next();
+        List<Persona>lista = new ArrayList<>();
+        lista=leerFichero();
+        for (Persona usuario : lista) {
+            if(usuario.getCedula().equals(cedula)){
+                editarUsuario(usuario);
+                usuario=menuEdicion(usuario);
+            }
         }
         return lista;
     }
     
+    
+    
+    public Persona menuEdicion(Persona usuario){
+        byte bandera=0;
+        while(bandera==0){
+            consolaMenuEdicion();
+            byte opcion=consola.nextByte();
+            switch(opcion){
+                case 1:
+                    System.out.println("Ingrese el nuevo nombre: ");
+                    usuario.setNombre(consola.next());
+                    break;
+                case 2:
+                    System.out.println("Ingrese la nueva edad :");
+                    usuario.setEdad(consola.nextByte());
+                    break;
+                case 3:
+                    System.out.println("Ingrese el nuevo genero :");
+                    usuario.setGenero(ingreseGenero(consola.next()));
+                    break;
+                case 0:
+                    bandera=1;
+                    return usuario;                 
+            }
+        }
+        return usuario;      
+    }
     
 }

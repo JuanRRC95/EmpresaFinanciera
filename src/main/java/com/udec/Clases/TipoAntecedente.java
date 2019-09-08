@@ -7,7 +7,9 @@ package com.udec.Clases;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -18,6 +20,7 @@ public class TipoAntecedente implements Serializable{
     private static final long serialVersionUID = -2873344211410398459L;
     private String nombreCaracteristico;
     private String descripcion;
+    private Map<String, String> map = new HashMap<String, String>();
     
     
     public TipoAntecedente(String nombreCaracteristico, String descripcion) {
@@ -40,28 +43,25 @@ public class TipoAntecedente implements Serializable{
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-    
-    public void listaTiposAntecedentesPositivos(){
-        List<TipoAntecedente>lista = new ArrayList<>();
-        lista = new ArrayList<>();
-        TipoAntecedente tipo1 = new TipoAntecedente("A1","El usuario tiene un excelente historial de pago");
-        TipoAntecedente tipo2 = new TipoAntecedente("A2","El usuario tiene ingresos fijos");
-        TipoAntecedente tipo3 = new TipoAntecedente("A3","Tiene buenas refrencias de otras entidades");
-        lista.add(tipo1);
-        lista.add(tipo2);
-        lista.add(tipo3);
+
+    public Map<String, String> getMap() {
+        return map;
     }
-    
-    public void listaTiposAntecedentesNegativos(){
-        List<TipoAntecedente>lista = new ArrayList<>();
-        lista = new ArrayList<>();
-        TipoAntecedente tipo1 = new TipoAntecedente("N1","El usuario tiene un historial de retardos en los pagos");
-        TipoAntecedente tipo2 = new TipoAntecedente("N2","El usuario no tiene ingresos estables");
-        TipoAntecedente tipo3 = new TipoAntecedente("N3","El usuario tiene malas referencias de otras entidades o simplemente no las tiene");
-        lista.add(tipo1);
-        lista.add(tipo2);
-        lista.add(tipo3);
+
+    public void setMap(Map<String, String> map) {
+        this.map = map;
+    }
+
         
+    public Map listaTiposAntecedentesPositivos(){      
+        map.put("A1","PAGOS");
+        map.put("A2","INGRESOS");
+        map.put("A3","REFERENCIAS");
+        map.put("N1","PAGOS");
+        map.put("N2","INGRESOS");
+        map.put("N3","REFERENCIAS");
+        setMap(map);
+        return map;
     }
     
 }

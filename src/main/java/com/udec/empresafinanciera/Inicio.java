@@ -16,7 +16,6 @@ public class Inicio {
      * @param args 
      */
     public static void main(String[] args) {
-        Logica l = new Logica();
-        
+        Logica l = new Logica(); 
     }
 }

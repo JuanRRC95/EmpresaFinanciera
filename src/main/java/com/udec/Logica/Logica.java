@@ -28,13 +28,13 @@ public class Logica {
     
     private Scanner consola = new Scanner(System.in);
     private List<Persona>lista = new ArrayList<>();
+    private String ruta="C:\\Users\\JuanPC\\Documents\\NetBeansProjects\\EmpresaFinanciera\\src\\main\\java\\com\\udec\\Ficheros\\usuarios.ddr";
     
     /**
      * Constructor vacio de la clase que inicia el metodo menu().
      */
     public Logica(){
         menuConsola();
-
     }
     
     /**
@@ -318,7 +318,7 @@ public class Logica {
         FileOutputStream fos = null;
         ObjectOutputStream salida = null;
         try {
-            fos = new FileOutputStream("C:\\Users\\JuanPC\\Documents\\NetBeansProjects\\EmpresaFinanciera\\src\\main\\java\\com\\udec\\Ficheros\\usuarios.ddr");
+            fos = new FileOutputStream(ruta);
             salida = new ObjectOutputStream(fos);
             salida.writeObject(crearJson(persona));
         }catch(Exception ex){
@@ -335,7 +335,7 @@ public class Logica {
         FileOutputStream fos = null;
         ObjectOutputStream salida = null;
         try {
-            fos = new FileOutputStream("C:\\Users\\JuanPC\\Documents\\NetBeansProjects\\EmpresaFinanciera\\src\\main\\java\\com\\udec\\Ficheros\\usuarios.ddr");
+            fos = new FileOutputStream(ruta);
             salida = new ObjectOutputStream(fos);
             for (Persona elemento : lista) {
                 Persona usuario = new Persona(elemento.getNombre(),elemento.getEdad(),elemento.getCedula(),elemento.getGenero(),elemento.getLista());
@@ -355,7 +355,7 @@ public class Logica {
         FileOutputStream fos = null;
         ObjectOutputStream salida = null;
         try {
-            fos = new FileOutputStream("C:\\Users\\JuanPC\\Documents\\NetBeansProjects\\EmpresaFinanciera\\src\\main\\java\\com\\udec\\Ficheros\\usuarios.ddr");
+            fos = new FileOutputStream(ruta);
             salida = new ObjectOutputStream(fos);
             for (Persona elemento : lista) {
                 Persona usuario = new Persona(elemento.getNombre(),elemento.getEdad(),elemento.getCedula(),elemento.getGenero(),elemento.getLista());
@@ -372,7 +372,7 @@ public class Logica {
      */    
     public List<Persona> leerFichero(){
         List<Persona> lista = new ArrayList<>();
-        try(ObjectInputStream ois=new ObjectInputStream(new FileInputStream("C:\\Users\\JuanPC\\Documents\\NetBeansProjects\\EmpresaFinanciera\\src\\main\\java\\com\\udec\\Ficheros\\usuarios.ddr"))){
+        try(ObjectInputStream ois=new ObjectInputStream(new FileInputStream(ruta))){
             while(true){            
                 String aux =(String)ois.readObject();
                 //System.out.println(aux);

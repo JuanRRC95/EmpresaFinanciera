@@ -4,10 +4,11 @@
  * and open the template in the editor.
  */
 package com.udec.Clases;
-
 /**
- *
- * @author JuanPC
+ * Clase de tipo enum que contiene los generos.
+ * @since EmpresaFinanciera 1.0
+ * @version 1.0
+ * @author Juan Ricardo Rodriguez Campos
  */
 public enum Genero {
     Masculino(1),

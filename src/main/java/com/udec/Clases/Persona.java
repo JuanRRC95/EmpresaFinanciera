@@ -1,19 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.udec.Clases;
-
 import java.io.Serializable;
 import java.util.List;
 
 /**
- *
- * @author JuanPC
+ * Clase Persona que contiene los atributos de esta clase.
+ * @since EmpresaFinanciera 1.0
+ * @version 1.0
+ * @author Juan Ricardo Rodriguez Campos
  */
 public class Persona implements Serializable {
     
+    /**
+     * Atributos de la clase
+     */
     private static final long serialVersionUID = -2873344211410398459L;
     private String nombre;
     private byte edad;
@@ -21,6 +20,14 @@ public class Persona implements Serializable {
     private Genero genero;
     private List<Antecedentes> lista;
 
+    /**
+     * Contructor de la clase
+     * @param nombre
+     * @param edad
+     * @param cedula
+     * @param genero
+     * @param lista 
+     */
     public Persona(String nombre, byte edad, String cedula, Genero genero, List<Antecedentes> lista) {
         this.nombre = nombre;
         this.edad = edad;
@@ -28,6 +35,10 @@ public class Persona implements Serializable {
         this.genero = genero;
         this.lista = lista;
     }
+    
+    /**
+     * Metodod Get y Set de la clase 
+     */
     
     public List<Antecedentes> getLista() {
         return lista;

@@ -1,12 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.udec.Logica;
-
 import com.udec.Clases.Antecedentes;
-import com.udec.Clases.Fichero;
 import com.udec.Clases.Genero;
 import com.udec.Clases.Persona;
 import com.udec.Clases.TipoAntecedente;
@@ -18,7 +11,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -27,19 +19,27 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 /**
- *
- * @author JuanPC
+ * Clase que contiene los metodos logicos del programa.
+ * @since EmpresaFinanciera 1.0
+ * @version 1.0
+ * @author Juan Ricardo Rodriguez Campos
  */
 public class Logica {
     
     private Scanner consola = new Scanner(System.in);
     private List<Persona>lista = new ArrayList<>();
     
+    /**
+     * Constructor vacio de la clase que inicia el metodo menu().
+     */
     public Logica(){
         menuConsola();
 
     }
     
+    /**
+     * Visual del Menu principal de la aplicacion
+     */
     public void menu(){
         System.out.println("-----Empresa Financiera-----");
         System.out.println("1. Registrar Usuario");
@@ -51,6 +51,9 @@ public class Logica {
         System.out.println("----------------------------");    
     }
     
+    /**
+     * Logica del menu inicial
+     */
     public void menuConsola(){
         byte bandera=0;
         String cedula="";
@@ -68,7 +71,7 @@ public class Logica {
                 case 4:System.out.println("Ingrese la cedula del usuario a editar :");
                        crearFicheroConDatos(BusquedaAntecedentesUsuario(consola.next()));
                     break;
-                case 5:System.out.println("Ingrese la cedula del usuario a editar :");
+                case 5:System.out.println("Ingrese la cedula del usuario :");
                        visualizarAntecedentes(consola.next());
                     break;
                 case 0: bandera=1;
@@ -77,6 +80,9 @@ public class Logica {
         }
     }
     
+    /**
+     * Visual del menu de antecedentes
+     */
     public void menuAntecedentes(){
         System.out.println("-------Tipo de Antecedente--------");
         System.out.println("-----Categorias de Antecedentes---");
@@ -92,34 +98,46 @@ public class Logica {
         System.out.println("0. Salir ");
         System.out.println("----------------------------------"); 
         System.out.println("Ingrese el tipo de antecedente :");
-  
     }
     
-   
-    
-    public void consolaMenuTipoAntecedentePositivo(String cedula){       
-        byte bandera=0;
-        while(bandera==0){
-            menuAntecedentes();
-            byte opcion=consola.nextByte();
-            switch(opcion){
-                case 1: TipoAntecedente antece1 = new TipoAntecedente("A1","PAGOS");
-                        añadirantecedente(antece1, cedula);break;
-                case 2: TipoAntecedente antece2 = new TipoAntecedente("A2","INGRESOS");
-                        añadirantecedente(antece2, cedula);break;
-                case 3: TipoAntecedente antece3 = new TipoAntecedente("A3","REFERENCIAS");
-                        añadirantecedente(antece3, cedula);break;
-                case 4: TipoAntecedente antece4 = new TipoAntecedente("N1","PAGOS");
-                        añadirantecedente(antece4, cedula);break;
-                case 5: TipoAntecedente antece5 = new TipoAntecedente("N2","INGRESOS");
-                        añadirantecedente(antece5, cedula);break;
-                case 6: TipoAntecedente antece6 = new TipoAntecedente("N3","REFERENCIAS");
-                        añadirantecedente(antece6, cedula);break;
-                case 0: bandera=1;break;
+    /**
+     * Metodo logico del menu de antecedente 
+     * @param cedula parametro que se envia a otro metodo
+     */
+    public void consolaMenuTipoAntecedentePositivo(String cedula){
+        if(validarUsuario(cedula)){
+            byte bandera=0;
+            while(bandera==0){
+                menuAntecedentes();
+                byte opcion=consola.nextByte();
+                switch(opcion){
+                    case 1: TipoAntecedente antece1 = new TipoAntecedente("A1","PAGOS");
+                            añadirantecedente(antece1, cedula);break;
+                    case 2: TipoAntecedente antece2 = new TipoAntecedente("A2","INGRESOS");
+                            añadirantecedente(antece2, cedula);break;
+                    case 3: TipoAntecedente antece3 = new TipoAntecedente("A3","REFERENCIAS");
+                            añadirantecedente(antece3, cedula);break;
+                    case 4: TipoAntecedente antece4 = new TipoAntecedente("N1","PAGOS");
+                            añadirantecedente(antece4, cedula);break;
+                    case 5: TipoAntecedente antece5 = new TipoAntecedente("N2","INGRESOS");
+                            añadirantecedente(antece5, cedula);break;
+                    case 6: TipoAntecedente antece6 = new TipoAntecedente("N3","REFERENCIAS");
+                            añadirantecedente(antece6, cedula);break;
+                    case 0: bandera=1;break;
+                }
             }
+        }else{
+            System.out.println("El usuario no existe");
         }
     }
     
+    /**
+     * Metodo que añade el antecedente del cliente
+     * @param tipo contiene el tipo de antecedente 
+     * @param cedula contiene la cedula del cliente
+     * estos parametros se envian al metodo de crearFichero para actualizar la lista
+     * de antecedentes.
+     */
     public void añadirantecedente(TipoAntecedente tipo,String cedula){
         System.out.println("Ingrese la descripcion del antecedente :");
         String saltoDeLinea = consola.nextLine();
@@ -128,6 +146,13 @@ public class Logica {
         
     }
    
+    /**
+     * Metodo que retorna la lista de usuarios con sus antecedentes actualizados.
+     * @param tipo parametro de tipo TipoAntecedente
+     * @param cedula cedula del usuario
+     * @param descripcion descripcion del antecedente
+     * @return lista de usuarios actualizada.
+     */
     public List<Persona> BusquedaAntecedentesUsuario(TipoAntecedente tipo,String cedula,String descripcion){
         List<Persona>lista = new ArrayList<>();
         Date fecha = new Date();
@@ -146,6 +171,11 @@ public class Logica {
         return lista;
     }
   
+    /**
+     * Metodo sobrecargado que solo recibe la cedula para accdere al usuario y eliminar un antecedente.
+     * @param cedula cedula del usuario
+     * @return lista de usuarios
+     */
     public List<Persona> BusquedaAntecedentesUsuario(String cedula){
         List<Persona>lista = new ArrayList<>();
         byte i=1;
@@ -162,26 +192,41 @@ public class Logica {
                 lista2.remove(posicion);
                 usuario.setLista(lista2);
                 
+            }else{
+                System.out.println("El usuario no existe");
             }
         }
         return lista;
     }
     
+    /**
+     * metodo que imprime los antecedentes de una persona.
+     * @param cedula del usuario
+     */
     public void visualizarAntecedentes(String cedula){
-        int i=0;
-        List<Antecedentes> lista2 = new ArrayList<>();
-        lista=leerFichero();
-        for (Persona usuario : lista) {
-            if(usuario.getCedula().equals(cedula)){
-                lista2=usuario.getLista();
-                for (Antecedentes elemento : lista2) {
-                    System.out.println((i++)+": "+" | Antecedente :"+elemento.getDescripcion()+
-                       "| Tipo :"+elemento.getTipo().getNombreCaracteristico()+"| FECHA :"+elemento.getFechaAntecedente());
+        if(validarUsuario(cedula)){
+            int i=0;
+            List<Antecedentes> lista2 = new ArrayList<>();
+            lista=leerFichero();
+            for (Persona usuario : lista) {
+                if(usuario.getCedula().equals(cedula)){
+                    lista2=usuario.getLista();
+                    for (Antecedentes elemento : lista2) {
+                        System.out.println((i++)+": "+" | Antecedente :"+elemento.getDescripcion()+
+                           "| Tipo :"+elemento.getTipo().getNombreCaracteristico()+"| FECHA :"+elemento.getFechaAntecedente());
+                    }
                 }
             }
+        }else{
+            System.out.println("EL usuario no existe");
         }
     }
     
+    /**
+     * Metodo que imprime solo los antecedentes negativos para poder eliminarlos
+     * @param cedula cedula de la persona
+     * @param lista lista de usuarios
+     */
     public void visualizarAntecedentesNegativos(String cedula,List<Antecedentes>lista){
         int i=0;
         for (Antecedentes elemento : lista) {
@@ -192,6 +237,10 @@ public class Logica {
         }
     }
     
+    /**
+     * Visual de la edicion del usuario---- enseña los datos del usuario a editar.
+     * @param usuario recibe un objeto Persona
+     */
     public void editarUsuario(Persona usuario){
         System.out.println("----Datos de Usuario----");
         System.out.println("Nombre :"+usuario.getNombre());
@@ -200,6 +249,9 @@ public class Logica {
         System.out.println("------------------------");
     }
     
+    /**
+     * Visual de edicion de usuario - muestra los parametros que se pueden editar
+     */
     public void consolaMenuEdicion(){
         System.out.println("Que dato desea modificar?...");
         System.out.println("1. Nombre");
@@ -208,7 +260,9 @@ public class Logica {
         System.out.println("0. Salir y guardar");
     }
     
-    
+    /**
+     * Metodo que captura los datos para crear un usuario
+     */
     public void crearUsuario(){
         Persona usuario = null;
         List<Antecedentes> lista2 = new ArrayList<>();
@@ -232,6 +286,11 @@ public class Logica {
         }
     }
     
+    /**
+     * metodo que retorna el genero basado en la letra elejida
+     * @param genero
+     * @return un objeto Genero
+     */
     public Genero ingreseGenero(String genero){
         if(genero.equals("M")||genero.equals("m")){
                    return Genero.Masculino; 
@@ -239,6 +298,11 @@ public class Logica {
         return Genero.Femenino;  
     }
     
+    /**
+     * Metodo que crear el JSON con los datos del objeto Persona que recibe como parametro.
+     * @param persona
+     * @return String JSON
+     */
     public String crearJson(Persona persona){
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String jsonEjemplo = gson.toJson(persona);
@@ -246,7 +310,10 @@ public class Logica {
     }
     
    
-    
+    /**
+     * Metodo que crea el fichero inicial del programa
+     * @param persona recibe un objeto Persona 
+     */
     public void crearFicheroInicial(Persona persona){ 
         FileOutputStream fos = null;
         ObjectOutputStream salida = null;
@@ -259,6 +326,11 @@ public class Logica {
         }
     }
     
+    /**
+     * Metodo que crea el fichero con los dnuevos datos.
+     * @param lista lista de usuarios actules
+     * @param persona objeto Persona que se quiere ingresar al fichero.
+     */
     public void crearFicheroConDatos(List<Persona>lista,Persona persona){               
         FileOutputStream fos = null;
         ObjectOutputStream salida = null;
@@ -275,6 +347,10 @@ public class Logica {
         }
     }
     
+    /**
+     * Metodo sobrecargado que crea el fichero cuando se edita un usuario. 
+     * @param lista recibe la lista de usuarios actualizados
+     */
     public void crearFicheroConDatos(List<Persona>lista){               
         FileOutputStream fos = null;
         ObjectOutputStream salida = null;
@@ -290,13 +366,16 @@ public class Logica {
         }
     }
     
-        
+    /**
+     * Metodo que lee el fichero y deserializa los objetos 
+     * @return retorna una lista de tipo Persona.
+     */    
     public List<Persona> leerFichero(){
         List<Persona> lista = new ArrayList<>();
         try(ObjectInputStream ois=new ObjectInputStream(new FileInputStream("C:\\Users\\JuanPC\\Documents\\NetBeansProjects\\EmpresaFinanciera\\src\\main\\java\\com\\udec\\Ficheros\\usuarios.ddr"))){
             while(true){            
                 String aux =(String)ois.readObject();
-                System.out.println(aux);
+                //System.out.println(aux);
                 Gson gson = new Gson();                
                 Persona ejemplo = gson.fromJson(aux, Persona.class);
                 lista.add(ejemplo);
@@ -308,6 +387,11 @@ public class Logica {
         return lista;
     }
     
+    /**
+     * Metodo que valida si el usuario ya esta registrado.
+     * @param cedula del  usuario
+     * @return true o false
+     */
     public boolean validarUsuario(String cedula){
         for (Persona usuario : leerFichero()) {
             if(usuario.getCedula().equals(cedula)){
@@ -317,6 +401,11 @@ public class Logica {
         return false;
     }
     
+    /**
+     * Metodo que busca el usuario que se desea editar.
+     * @param cedula de la persona.
+     * @return lista de Persona.
+     */
     public List<Persona> BusquedaEditarUsuario(String cedula){
         List<Persona>lista = new ArrayList<>();
         lista=leerFichero();
@@ -331,6 +420,10 @@ public class Logica {
         return lista;
     }
     
+    /**
+     * 
+     * @param cedula 
+     */
     public void eliminarAntecedente(String cedula){
         List<Persona>lista = new ArrayList<>();
         lista=leerFichero();
@@ -344,7 +437,11 @@ public class Logica {
         }
     }
     
-    
+    /**
+     * Metodo que contiene la logica del menuEdicion
+     * @param usuario Objeto Persona que contiene los datos a editar
+     * @return el objeto Persona ya modificado.
+     */
     public Persona menuEdicion(Persona usuario){
         byte bandera=0;
         while(bandera==0){
@@ -370,5 +467,5 @@ public class Logica {
         }
         return usuario;      
     }
-    
+    //Fin de la clase.
 }
